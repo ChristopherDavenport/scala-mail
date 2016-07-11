@@ -11,13 +11,13 @@ case class PasswordAuthentication(
                                  password: String
                                  )
 
-object PasswordAuthentication {
+//object PasswordAuthentication {
 
-  implicit class AsJava(passwordAuthentication: PasswordAuthentication){
-    def asJava: jPasswordAuthentication = {
-      new jPasswordAuthentication(passwordAuthentication.userName, passwordAuthentication.password)
-    }
-  }
+//  implicit class AsJava(passwordAuthentication: PasswordAuthentication){
+//    def asJava: jPasswordAuthentication = {
+//      new jPasswordAuthentication(passwordAuthentication.userName, passwordAuthentication.password)
+//    }
+//  }
 
 
-}
+//}

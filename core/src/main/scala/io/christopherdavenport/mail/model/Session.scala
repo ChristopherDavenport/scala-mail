@@ -14,29 +14,26 @@ case class Session(
                     socketFactory: Option[String] = None
                   )
 
-object Session {
-  implicit class AsJava(session: Session){
-    def asJava: jSession = {
-
-      val properties = new jProperties{
-        put("mail.smtp.host", session.host)
-        put("mail.smtp.port", session.port.toString)
-
-        session.passwordAuthentication.map(authBool => put("mail.smtp.auth", true.toString))
-        session.useTtls.map(useTtlsBool => put("mail.smtp.starttls.enable", useTtlsBool.toString))
-        session.socketFactory.map(customSF => put("mail.smtp.scoketFactory.class", customSF))
-      }
-
-      session.passwordAuthentication match {
-        case None =>
-          jSession.getInstance(properties)
-        case Some(credentials) =>
-          jSession.getInstance(properties, Authenticator(credentials).asJava )
-      }
-
-    }
-  }
-
-
-
-}
+//object Session {
+//  implicit class AsJava(session: Session){
+//    def asJava: jSession = {
+//
+//      val properties = new jProperties{
+//        put("mail.smtp.host", session.host)
+//        put("mail.smtp.port", session.port.toString)
+//
+//        session.passwordAuthentication.map(authBool => put("mail.smtp.auth", true.toString))
+//        session.useTtls.map(useTtlsBool => put("mail.smtp.starttls.enable", useTtlsBool.toString))
+//        session.socketFactory.map(customSF => put("mail.smtp.scoketFactory.class", customSF))
+//      }
+//
+//      session.passwordAuthentication match {
+//        case None =>
+//          jSession.getInstance(properties)
+//        case Some(credentials) =>
+//          jSession.getInstance(properties, Authenticator(credentials).asJava )
+//      }
+//
+//    }
+//  }
+//}
