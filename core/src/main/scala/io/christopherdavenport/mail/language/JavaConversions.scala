@@ -3,12 +3,10 @@ package io.christopherdavenport.mail.language
 
 
 import language.implicitConversions
-import io.christopherdavenport.mail.model.{Authenticator, BCC, CC, InternetAddress, Message, PasswordAuthentication, Session, TO}
-import javax.mail.{Authenticator => jAuthenticator}
-import javax.mail.{PasswordAuthentication => jPasswordAuthentication}
+import io.christopherdavenport.mail.model.{Authenticator, InternetAddress, Message, PasswordAuthentication, Session}
+import io.christopherdavenport.mail.model.RecipientTypes.{BCC, CC, TO}
+import javax.mail.{Address => jAddress, Authenticator => jAuthenticator, PasswordAuthentication => jPasswordAuthentication, Session => jSession, Transport => jTransport}
 import javax.mail.internet.{InternetAddress => jInternetAddress}
-import javax.mail.{Address => jAddress}
-import javax.mail.{Session => jSession}
 import java.util.{Properties => jProperties}
 import javax.mail.internet.{MimeMessage => jMimeMessage}
 

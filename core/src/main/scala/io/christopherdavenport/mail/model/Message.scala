@@ -1,6 +1,7 @@
 package io.christopherdavenport.mail.model
 
-import javax.mail.Transport
+import javax.mail.{Transport => jTransport}
+
 import javax.mail.internet.{MimeMessage => jMimeMessage}
 import scala.concurrent.{ExecutionContext, Future}
 /**
@@ -14,39 +15,16 @@ case class Message(
                     replyTo: Option[Seq[InternetAddress]] = None,
                     headers: Option[Seq[(String, String)]] = None,
                     bodyContent: String
-                  ) {
-
-  def send()(implicit ec: ExecutionContext): Future[Unit] = {
-//    val msg = new jMimeMessage(session.asJava){
-//      setFrom(from.asJava)
-//      subject.foreach(setSubject(_))
-//
-//      val recipientByType = recipients.groupBy(_.recipientType)
-//
-//      val to = recipientByType.get(TO)
-//        .map(_.map(_.internetAddress.asJavaAddress).toArray)
-//      to.foreach(addRecipients(TO.asJava, _))
-//      val cc = recipientByType.get(CC)
-//        .map(_.map(_.internetAddress.asJavaAddress).toArray)
-//      cc.foreach(addRecipients(TO.asJava, _))
-//      val bcc = recipientByType.get(BCC)
-//        .map(_.map(_.internetAddress.asJavaAddress).toArray)
-//      bcc.foreach(addRecipients(TO.asJava, _))
-//
-//
-//      replyTo.foreach(replyTo =>
-//        setReplyTo(replyTo.map(_.asJava).toArray))
-//
-//      setText(bodyContent)
-//    }
-    import io.christopherdavenport.mail.language.JavaConverters._
-    val msg = this.asJava
-
-    Future{ Transport.send(msg) }
-  }
-
+                  ){
+  def send(implicit ec: ExecutionContext): Future[Unit] = Message.send(this)(ec)
 }
 
-//object Message{
-//
-//}
+
+object Message{
+  def send(message: Message)(implicit ec: ExecutionContext): Future[Unit] = {
+    import io.christopherdavenport.mail.language.JavaConverters._
+    Future{
+      jTransport.send(message.asJava)
+    }
+  }
+}

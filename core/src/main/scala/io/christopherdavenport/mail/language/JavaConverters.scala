@@ -1,17 +1,7 @@
 package io.christopherdavenport.mail.language
 
 import language.implicitConversions
-
-
-import io.christopherdavenport.mail.model.Authenticator
-import io.christopherdavenport.mail.model.PasswordAuthentication
-import io.christopherdavenport.mail.model.InternetAddress
-import io.christopherdavenport.mail.model.Message
-import io.christopherdavenport.mail.model.Session
-import io.christopherdavenport.mail.model.TO
-import io.christopherdavenport.mail.model.CC
-import io.christopherdavenport.mail.model.BCC
-
+import io.christopherdavenport.mail.model.{Authenticator, InternetAddress, Message, PasswordAuthentication, Session}
 import javax.mail.{Authenticator => jAuthenticator}
 import javax.mail.{PasswordAuthentication => jPasswordAuthentication}
 import javax.mail.internet.{InternetAddress => jInternetAddress}
