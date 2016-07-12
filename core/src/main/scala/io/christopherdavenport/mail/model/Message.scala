@@ -14,7 +14,7 @@ case class Message(
                     subject: Option[String] = None,
                     replyTo: Option[Seq[InternetAddress]] = None,
                     headers: Option[Seq[(String, String)]] = None,
-                    bodyContent: String
+                    bodyContent: Multipart
                   ){
   def send(implicit ec: ExecutionContext): Future[Unit] = Message.send(this)(ec)
 }

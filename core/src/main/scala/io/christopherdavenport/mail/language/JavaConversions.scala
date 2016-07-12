@@ -3,12 +3,16 @@ package io.christopherdavenport.mail.language
 
 
 import language.implicitConversions
-import io.christopherdavenport.mail.model.{Authenticator, InternetAddress, Message, PasswordAuthentication, Session}
+import io.christopherdavenport.mail.model.{Attachment, Authenticator, ByteAttachment, Html, InternetAddress, Message, Multipart, PasswordAuthentication, Session, Text}
 import io.christopherdavenport.mail.model.RecipientTypes.{BCC, CC, TO}
 import javax.mail.{Address => jAddress, Authenticator => jAuthenticator, PasswordAuthentication => jPasswordAuthentication, Session => jSession, Transport => jTransport}
 import javax.mail.internet.{InternetAddress => jInternetAddress}
 import java.util.{Properties => jProperties}
+import javax.activation.{DataHandler, FileDataSource}
 import javax.mail.internet.{MimeMessage => jMimeMessage}
+import javax.mail.internet.MimeBodyPart
+import javax.mail.internet.MimeMultipart
+import javax.mail.util.ByteArrayDataSource
 
 /**
   * Created by davenpcm on 7/11/16.
@@ -86,7 +90,45 @@ object JavaConversions {
       m.replyTo.foreach(replyTo =>
         setReplyTo(replyTo.map(a => InternetAddressAsJavaAddressConversion(a)).toArray))
 
-      setText(m.bodyContent)
+      setContent(m.bodyContent)
+    }
+  }
+
+  implicit def HtmlMimePartConversion(html: Html): MimeBodyPart = {
+    new MimeBodyPart{
+      setContent(html.content, "text/html")
+    }
+  }
+
+  implicit def TextMimePartConversion(text: Text): MimeBodyPart = {
+    new MimeBodyPart{
+      setContent(text.content, "text/plain")
+    }
+  }
+
+  implicit def AttachmentMimePartConversion(attachment: Attachment): MimeBodyPart = {
+    new MimeBodyPart{
+      setDataHandler(new DataHandler(new FileDataSource(attachment.file)))
+      setFileName(attachment.file.getName)
+    }
+  }
+
+  implicit def ByteAttachmentMimePartConversion(byteAttachment: ByteAttachment): MimeBodyPart = {
+    new MimeBodyPart{
+      setDataHandler(new DataHandler(new ByteArrayDataSource(byteAttachment.bytes, byteAttachment.mimeType)))
+      setFileName(byteAttachment.name)
+    }
+  }
+
+  implicit def MultipartConversion(multiPart: Multipart): MimeMultipart = {
+    val jSeq : Seq[MimeBodyPart] = multiPart.seq.map{
+      case t : Text => TextMimePartConversion(t)
+      case h : Html => HtmlMimePartConversion(h)
+      case a : Attachment => AttachmentMimePartConversion(a)
+      case b : ByteAttachment => ByteAttachmentMimePartConversion(b)
+    }
+    new MimeMultipart(){
+      jSeq.foreach(addBodyPart(_))
     }
   }
 
