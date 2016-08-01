@@ -1,7 +1,5 @@
 package io.christopherdavenport.mail.language
 
-
-
 import language.implicitConversions
 import io.christopherdavenport.mail.model.{Attachment, Authenticator, ByteAttachment, Html, InternetAddress, Message, Multipart, PasswordAuthentication, Session, Text}
 import io.christopherdavenport.mail.model.RecipientTypes.{BCC, CC, TO}
@@ -44,7 +42,7 @@ object JavaConversions {
       put("mail.smtp.port", s.port.toString)
 
       s.passwordAuthentication.map(authBool => put("mail.smtp.auth", true.toString))
-      s.useTtls.map(useTtlsBool => put("mail.smtp.starttls.enable", useTtlsBool.toString))
+      s.useTls.map(useTlsBool => put("mail.smtp.starttls.enable", useTlsBool.toString))
       s.socketFactory.map(customSF => put("mail.smtp.scoketFactory.class", customSF))
     }
 
@@ -61,7 +59,7 @@ object JavaConversions {
 
     new jMimeMessage(m.session){
       setFrom(InternetAddressAsJavaAddressConversion(m.from))
-      m.subject.foreach(setSubject(_))
+      m.subject.foreach(setSubject)
 
       val recipientByType = m.recipients.groupBy(_.recipientType)
 
@@ -128,9 +126,8 @@ object JavaConversions {
       case b : ByteAttachment => ByteAttachmentMimePartConversion(b)
     }
     new MimeMultipart(){
-      jSeq.foreach(addBodyPart(_))
+      jSeq.foreach(addBodyPart)
     }
   }
-
 
 }
