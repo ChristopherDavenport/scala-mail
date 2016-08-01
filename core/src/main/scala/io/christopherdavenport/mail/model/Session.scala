@@ -7,6 +7,6 @@ case class Session(
                     host: String,
                     port: Int,
                     passwordAuthentication: Option[PasswordAuthentication],
-                    useTtls: Option[Boolean] = None,
+                    useTls: Option[Boolean] = None,
                     socketFactory: Option[String] = None
                   )
